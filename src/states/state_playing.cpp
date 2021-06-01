@@ -46,8 +46,15 @@ void State_playing::move_creature(Moving* creature){
             }
         }
     }
+}
 
+void State_playing::reset_positions(){
+    pacMan->teleport(*labirynth->starting_positions[pac_man]);
 
+    ghosts->ghosts[Blinky]->teleport(*labirynth->starting_positions[blinky]);
+    ghosts->ghosts[Pinky]->teleport(*labirynth->starting_positions[pinky]);
+    ghosts->ghosts[Clyde]->teleport(*labirynth->starting_positions[clyde]);
+    ghosts->ghosts[Inky]->teleport(*labirynth->starting_positions[inky]);
 }
 
 void State_playing::loop() {
@@ -58,10 +65,11 @@ void State_playing::loop() {
         pacMan->eat_food();
     }
 
+
     for (auto p : ghosts->ghosts){
         if (p.second->tile_position == pacMan->tile_position){
             console->write("OOPSIE");
-            pacMan->teleport(15, 13);
+            reset_positions();
         }
     }
 }

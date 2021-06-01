@@ -4,7 +4,7 @@
 
 #include "PacMan.h"
 
-PacMan::PacMan(sf::RenderWindow &window, Labirynth *labirynth) : Moving(sf::Vector2i(5, 5), window, labirynth) {
+PacMan::PacMan(sf::RenderWindow &window, Labirynth *labirynth) : Moving(*labirynth->starting_positions[pac_man], window, labirynth) {
     console = new Console("PAC MAN");
     setStartingDelay(0.1);
 }
@@ -20,7 +20,7 @@ void PacMan::eat_food() {
 
 
 int PacMan::get_food_eaten() {
-    return 0;
+    return eaten_food;
 }
 
 

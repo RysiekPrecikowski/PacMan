@@ -23,6 +23,14 @@ enum point_type{
     point
 };
 
+enum starting_pos{
+    pac_man,
+    pinky,
+    inky,
+    clyde,
+    blinky
+};
+
 class Tile : public Entity{
 public:
     Tile(const sf::Vector2i &tilePosition, sf::RenderWindow& window);
@@ -43,6 +51,9 @@ public:
     explicit Labirynth(sf::RenderWindow& window);
     bool is_maze(int x, int y);
     bool is_crossing(sf::Vector2i position);
+
+    std::map<starting_pos, sf::Vector2i*> starting_positions;
+
 
 
 //    bool is_maze2(Moving *creature, Directions direction);

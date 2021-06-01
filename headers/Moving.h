@@ -68,7 +68,7 @@ public:
         return false;
     }
 
-    float getDelay() const;
+    [[nodiscard]] float getDelay() const;
 };
 
 

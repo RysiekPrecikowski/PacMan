@@ -39,6 +39,8 @@ public:
     void keyReleased(int code) override;
 
     void move_creature(Moving *creature);
+
+    void reset_positions();
 };
 
 #endif //CPP_STATE_PLAYING_H

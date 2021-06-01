@@ -6,6 +6,8 @@
 
 Ghost::Ghost(const sf::Vector2i &tilePosition, sf::RenderWindow &window, Labirynth *labirynth) : Moving(tilePosition, window, labirynth) {
     get_directions()->push(left);
+
+
 }
 
 void Ghost::next_move(sf::Vector2i pos) {
@@ -94,4 +96,61 @@ void Ghost::next_move_scatter(sf::Vector2i pos) {
     target = pos;
 
     change_direction(direction);
+}
+
+void Ghost::inverse_direction(){
+    auto direction = static_cast<Directions>(-get_directions()->front());
+
+    std::string message = "CHANGE DIRECTION from " + std::to_string(get_directions()->front()) + " to ";
+    if (can_move(direction)){
+        change_direction(direction);
+    } else {
+        if (direction == up or direction == down) {
+            if (can_move(left))
+                change_direction(left);
+            else if (can_move(right))
+                change_direction(right);
+
+        } else if (direction == left or right){
+            if (can_move(up))
+                change_direction(up);
+            else if (can_move(down))
+                change_direction(down);
+        }
+    }
+    message += std::to_string(get_directions()->front());
+
+    console->write(message);
+}
+
+void Ghost::change_mode(Mode to_mode){
+    mode = to_mode;
+
+    if(chase_counter == 2){
+        base_scatter_duration = 5;
+        scale_mode_time();
+    } else if (chase_counter == 4){
+        base_chase_duration = 10000000;
+        base_scatter_duration = 0;
+        scale_mode_time();
+    }
+
+
+    console->write("CHANGE MODE " + std::to_string(to_mode));
+
+    inverse_direction();
+}
+
+void Ghost::actualize_mode() {
+    if (time_to_change_mode()){
+        switch (mode) {
+            case chase:
+                change_mode(scatter);
+                break;
+            case scatter:
+                change_mode(chase);
+                chase_counter ++;
+                break;
+        }
+    }
 }

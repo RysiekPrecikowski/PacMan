@@ -60,6 +60,26 @@ Labirynth::Labirynth(sf::RenderWindow &window){
                 case 4:
                     type = none;
                     break;
+                case 5:
+                    starting_positions[pac_man] = new sf::Vector2i(i, j);
+                    type = regular;
+                    break;
+                case 6:
+                    starting_positions[inky] = new sf::Vector2i(i, j);
+                    type = regular;
+                    break;
+                case 7:
+                    starting_positions[blinky] = new sf::Vector2i(i, j);
+                    type = regular;
+                    break;
+                case 8:
+                    starting_positions[clyde] = new sf::Vector2i(i, j);
+                    type = regular;
+                    break;
+                case 9:
+                    starting_positions[pinky] = new sf::Vector2i(i, j);
+                    type = regular;
+                    break;
             }
 
             tiles[i][j]->type = type;
