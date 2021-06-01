@@ -33,7 +33,7 @@ add_executable(cpp
         src/creatures/Moving.cpp
         headers/Moving.h)
 target_include_directories(cpp PRIVATE headers)
-set(SFML_ROOT c:/SFML)
+set(SFML_ROOT SFML)
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake_modules")
 find_package(SFML REQUIRED system window graphics network audio)
 if (SFML_FOUND)
