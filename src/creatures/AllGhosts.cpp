@@ -2,64 +2,64 @@
 // Created by rprec on 31.05.2021.
 //
 
-#include "All_ghosts.h"
+#include "AllGhosts.h"
 
 using namespace sf;
 
-All_ghosts::All_ghosts(RenderWindow &window, Maze *maze) : maze(maze) {
+AllGhosts::AllGhosts(RenderWindow &window, Maze *maze) : maze(maze) {
     ghosts[Blinky] = new Ghost(*maze->starting_positions[blinky], window, maze);
     ghosts[Blinky]->console = new Console("Blinky");
-    ghosts[Blinky]->setGoesThroughFake(true);
-    ghosts[Blinky]->scatter_mode_target = Vector2i (Maze::size_x - 1, 0);
+    ghosts[Blinky]->set_goes_through_fake(true);
+    ghosts[Blinky]->scatter_mode_target = Vector2i(Maze::size_x - 1, 0);
     ghosts[Blinky]->change_mode(scatter);
     ghosts[Blinky]->escaped = true;
 
-    ghosts[Pinky]  = new Ghost(*maze->starting_positions[pinky], window, maze);
+    ghosts[Pinky] = new Ghost(*maze->starting_positions[pinky], window, maze);
     ghosts[Pinky]->console = new Console("Pinky");
-    ghosts[Pinky]->setGoesThroughFake(true);
-    ghosts[Pinky]->scatter_mode_target = Vector2i (0, 0);
+    ghosts[Pinky]->set_goes_through_fake(true);
+    ghosts[Pinky]->scatter_mode_target = Vector2i(0, 0);
     ghosts[Pinky]->change_mode(scatter);
 
-    ghosts[Inky]   = new Ghost(*maze->starting_positions[inky], window, maze);
+    ghosts[Inky] = new Ghost(*maze->starting_positions[inky], window, maze);
     ghosts[Inky]->console = new Console("Inky");
-    ghosts[Inky]->setGoesThroughFake(false);
-    ghosts[Inky]->scatter_mode_target = Vector2i (Maze::size_x - 1, Maze::size_y - 1);
+    ghosts[Inky]->set_goes_through_fake(false);
+    ghosts[Inky]->scatter_mode_target = Vector2i(Maze::size_x - 1, Maze::size_y - 1);
     ghosts[Inky]->change_mode(scatter);
 
-    ghosts[Clyde]  = new Ghost(*maze->starting_positions[clyde], window, maze);
+    ghosts[Clyde] = new Ghost(*maze->starting_positions[clyde], window, maze);
     ghosts[Clyde]->console = new Console("Clyde");
-    ghosts[Clyde]->setGoesThroughFake(false);
-    ghosts[Clyde]->scatter_mode_target = Vector2i (0, Maze::size_y - 1);
+    ghosts[Clyde]->set_goes_through_fake(false);
+    ghosts[Clyde]->scatter_mode_target = Vector2i(0, Maze::size_y - 1);
     ghosts[Clyde]->change_mode(scatter);
 }
 
-sf::Vector2i get_target_ahead_pac_man(PacMan *pacMan, int tiles){
+sf::Vector2i get_target_ahead_pac_man(PacMan *pacMan, int tiles) {
     Vector2i target = pacMan->tile_position;
 
-    if (pacMan->get_directions()->empty()){
+    if (pacMan->get_directions()->empty()) {
         return target;
     }
 
     switch (pacMan->get_directions()->front()) {
         case up:
-            target += Vector2i (-tiles, -tiles); // bug in original game
+            target += Vector2i(-tiles, -tiles); // bug in original game
             break;
         case down:
-            target += Vector2i (0, tiles);
+            target += Vector2i(0, tiles);
             break;
         case left:
-            target += Vector2i (-tiles, 0);
+            target += Vector2i(-tiles, 0);
             break;
         case right:
-            target += Vector2i (tiles, 0);
+            target += Vector2i(tiles, 0);
             break;
     }
     return target;
 }
 
-void All_ghosts::move_ghosts(PacMan *PacMan) {
+void AllGhosts::move_ghosts(PacMan *PacMan) {
     if (ghosts[Blinky]->time_to_move()) {
-        ghosts[Blinky]->scaleDelay((1 - ( 1- (float)maze->food_in_maze / (float)maze->starting_food_in_maze) / 2));
+        ghosts[Blinky]->scaleDelay((1 - (1 - (float) maze->food_in_maze / (float) maze->starting_food_in_maze) / 2));
         ghosts[Blinky]->next_move(PacMan->tile_position);
         ghosts[Blinky]->actualize_mode();
         ghosts[Blinky]->move();
@@ -77,7 +77,7 @@ void All_ghosts::move_ghosts(PacMan *PacMan) {
         Inkys_target += Blinkys_vector;
 
         if (PacMan->get_food_eaten() >= 30) {
-            ghosts[Inky]->setGoesThroughFake(true);
+            ghosts[Inky]->set_goes_through_fake(true);
         }
 
         ghosts[Inky]->next_move(Inkys_target);
@@ -86,8 +86,8 @@ void All_ghosts::move_ghosts(PacMan *PacMan) {
     }
 
     if (ghosts[Clyde]->time_to_move()) {
-        if ((1 - (float)maze->food_in_maze / (float)maze->starting_food_in_maze) >= 1.f / 3.f)
-            ghosts[Clyde]->setGoesThroughFake(true);
+        if ((1 - (float) maze->food_in_maze / (float) maze->starting_food_in_maze) >= 1.f / 3.f)
+            ghosts[Clyde]->set_goes_through_fake(true);
 
         int Clyde_distance = Ghost::get_distance(PacMan->tile_position.x, PacMan->tile_position.y,
                                                  ghosts[Clyde]->tile_position);
@@ -105,8 +105,8 @@ void All_ghosts::move_ghosts(PacMan *PacMan) {
     }
 }
 
-void All_ghosts::frighten_ghosts(){
-    for(auto p: ghosts){
+void AllGhosts::frighten_ghosts() {
+    for (auto p: ghosts) {
         auto ghost = p.second;
 
         ghost->is_frightened = true;

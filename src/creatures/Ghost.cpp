@@ -4,7 +4,8 @@
 
 #include "Ghost.h"
 
-Ghost::Ghost(const sf::Vector2i &tilePosition, sf::RenderWindow &window, Maze *maze) : Moving(tilePosition, window, maze) {
+Ghost::Ghost(const sf::Vector2i &tilePosition, sf::RenderWindow &window, Maze *maze) : Moving(tilePosition, window,
+                                                                                              maze) {
     get_directions()->push(left);
 
 
@@ -22,7 +23,7 @@ void Ghost::next_move(sf::Vector2i pos) {
     if (ret)
         return;
 
-    if (is_frightened){
+    if (is_frightened) {
         next_move_frightened();
     } else {
         switch (mode) {
@@ -37,30 +38,30 @@ void Ghost::next_move(sf::Vector2i pos) {
     }
 }
 
-int pow2(int val){
+int pow2(int val) {
     return val * val;
 }
 
-int Ghost::get_distance(int x, int y, sf::Vector2i pos){
+int Ghost::get_distance(int x, int y, sf::Vector2i pos) {
     return pow2(x - pos.x) + pow2(y - pos.y);
 }
 
-Directions Ghost::get_best_direction(sf::Vector2i pos){
+Directions Ghost::get_best_direction(sf::Vector2i pos) {
     Directions best = right;
-    if (!maze->is_crossing(tile_position)){
-        if(can_move(up) and up != -get_directions()->front()){
+    if (!maze->is_crossing(tile_position)) {
+        if (can_move(up) and up != -get_directions()->front()) {
             best = up;
         } else if (can_move(left) and left != -get_directions()->front()) {
             best = left;
-        } else if (can_move(right) and right != -get_directions()->front()){
+        } else if (can_move(right) and right != -get_directions()->front()) {
             best = right;
-        } else if (can_move(down) and down != -get_directions()->front()){
+        } else if (can_move(down) and down != -get_directions()->front()) {
             best = down;
         }
         return best;
     }
 
-    if (getGoesThroughFake() and !escaped){
+    if (getGoesThroughFake() and !escaped) {
         console->write("ESCAPE");
         pos.y = 0;
         escaped = true;
@@ -70,20 +71,23 @@ Directions Ghost::get_best_direction(sf::Vector2i pos){
 
     int x = tile_position.x, y = tile_position.y;
 
-    if ((distance = get_distance(x , y -1, pos)) < best_distance and can_move(up) and up != -get_directions()->front()){
+    if ((distance = get_distance(x, y - 1, pos)) < best_distance and can_move(up) and
+        up != -get_directions()->front()) {
         best_distance = distance;
         best = up;
     }
 
-    if ((distance = get_distance(x -1 , y, pos)) < best_distance and can_move(left) and left != -get_directions()->front()){
+    if ((distance = get_distance(x - 1, y, pos)) < best_distance and can_move(left) and
+        left != -get_directions()->front()) {
         best_distance = distance;
         best = left;
     }
-    if ((distance = get_distance(x , y + 1, pos)) < best_distance and can_move(down) and down != -get_directions()->front()){
+    if ((distance = get_distance(x, y + 1, pos)) < best_distance and can_move(down) and
+        down != -get_directions()->front()) {
         best_distance = distance;
         best = down;
     }
-    if (get_distance(x + 1 , y, pos) < best_distance and can_move(right) and right != -get_directions()->front()){
+    if (get_distance(x + 1, y, pos) < best_distance and can_move(right) and right != -get_directions()->front()) {
         best = right;
     }
 
@@ -106,20 +110,20 @@ void Ghost::next_move_scatter(sf::Vector2i pos) {
     change_direction(direction);
 }
 
-void Ghost::next_move_frightened(){
-    auto direction = static_cast<Directions>(rand() % 5 -2);
+void Ghost::next_move_frightened() {
+    auto direction = static_cast<Directions>(rand() % 5 - 2);
 
-    while (!can_move(direction) or direction == -get_directions()->front()){
-        direction = static_cast<Directions>(rand() % 5 -2);
+    while (!can_move(direction) or direction == -get_directions()->front()) {
+        direction = static_cast<Directions>(rand() % 5 - 2);
     }
 
     change_direction(direction);
 }
 
-void Ghost::inverse_direction(){
+void Ghost::inverse_direction() {
     auto direction = static_cast<Directions>(-get_directions()->front());
 
-    if (can_move(direction)){
+    if (can_move(direction)) {
         change_direction(direction);
     } else {
         if (direction == up or direction == down) {
@@ -128,7 +132,7 @@ void Ghost::inverse_direction(){
             else if (can_move(right))
                 change_direction(right);
 
-        } else if (direction == left or right){
+        } else if (direction == left or right) {
             if (can_move(up))
                 change_direction(up);
             else if (can_move(down))
@@ -137,13 +141,13 @@ void Ghost::inverse_direction(){
     }
 }
 
-void Ghost::change_mode(Mode to_mode){
+void Ghost::change_mode(Mode to_mode) {
     mode = to_mode;
 
-    if(chase_counter == 2){
+    if (chase_counter == 2) {
         base_scatter_duration = 5;
         scale_mode_time();
-    } else if (chase_counter == 4){
+    } else if (chase_counter == 4) {
         base_chase_duration = 10000000;
         base_scatter_duration = 0;
         scale_mode_time();
@@ -153,22 +157,22 @@ void Ghost::change_mode(Mode to_mode){
 }
 
 void Ghost::actualize_mode() {
-    if (time_to_change_mode()){
+    if (time_to_change_mode()) {
         switch (mode) {
             case chase:
                 change_mode(scatter);
                 break;
             case scatter:
                 change_mode(chase);
-                chase_counter ++;
+                chase_counter++;
                 break;
         }
     }
 }
 
 bool Ghost::time_to_change_mode() {
-    if (is_frightened){
-        if (frightened_clock.getElapsedSeconds() > frightened_duration){
+    if (is_frightened) {
+        if (frightened_clock.getElapsedSeconds() > frightened_duration) {
             end_frightened();
         } else {
             return false;
@@ -189,7 +193,7 @@ bool Ghost::time_to_change_mode() {
             break;
     }
 
-    if (time > delay){
+    if (time > delay) {
         mode_myClock.reset();
 
         return true;

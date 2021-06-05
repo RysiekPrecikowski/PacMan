@@ -4,9 +4,9 @@
 
 #include "Moving.h"
 
-Moving::Moving(const sf::Vector2i &tilePosition, sf::RenderWindow &window, Maze *labirynth) : Entity(tilePosition, window) {
+Moving::Moving(const sf::Vector2i &tilePosition, sf::RenderWindow &window, Maze *maze) : Entity(tilePosition, window) {
     directions = new std::queue<Directions>;
-    this->maze = labirynth;
+    this->maze = maze;
 }
 
 void Moving::move() {
@@ -40,22 +40,22 @@ void Moving::move() {
 }
 
 void Moving::stop() {
-    if(not directions->empty())
+    if (not directions->empty())
         directions->pop();
 }
 
 #include <iostream>
 
-bool Moving::check_direction(Directions direction){
+bool Moving::check_direction(Directions direction) {
     if (directions->empty()) {
         return true;
     }
 
-    if (!can_move(direction) ){
+    if (!can_move(direction)) {
         return true;
     }
 
-    if(direction != directions->front())
+    if (direction != directions->front())
         return true;
 
 //    std::cout<<"RETURN CHECK DIRECTION";
@@ -95,24 +95,24 @@ bool Moving::is_dead() {
     return not alive;
 }
 
-bool Moving::can_step(int x, int y){
+bool Moving::can_step(int x, int y) {
     if (goes_through_fake)
         return !maze->is_maze(x, y);
     else
         return !maze->is_maze(x, y) and !maze->is_fake(x, y);
 }
 
-bool Moving::can_move(Directions direction){
-    if (direction == Directions::NONE){
+bool Moving::can_move(Directions direction) {
+    if (direction == Directions::NONE) {
         return false;
     }
 
 
     switch (direction) {
         case up:
-            return can_step(tile_position.x, tile_position.y-1);
+            return can_step(tile_position.x, tile_position.y - 1);
         case down:
-            return can_step(tile_position.x, tile_position.y+1);
+            return can_step(tile_position.x, tile_position.y + 1);
         case left:
             return can_step(tile_position.x - 1, tile_position.y);
         case right:
@@ -121,7 +121,7 @@ bool Moving::can_move(Directions direction){
     return true;
 }
 
-void Moving::setGoesThroughFake(bool goesThroughFake) {
+void Moving::set_goes_through_fake(bool goesThroughFake) {
     goes_through_fake = goesThroughFake;
 }
 
@@ -153,13 +153,13 @@ void Moving::pause() {
 
 void Moving::resume() {
     myClock.start();
-    paused= false;
+    paused = false;
 }
 
 bool Moving::time_to_move() {
     float time = myClock.getElapsedSeconds();
 
-    if (time > delay){
+    if (time > delay) {
         myClock.reset();
         return true;
     }

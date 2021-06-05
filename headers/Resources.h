@@ -6,7 +6,7 @@
 #define CPP_RESOURCES_H
 
 #include "SFML/Graphics.hpp"
-#include "console.h"
+#include "Console.h"
 
 enum Ghosts {
     Blinky,
@@ -16,7 +16,7 @@ enum Ghosts {
 };
 
 
-class Resources{
+class Resources {
 private:
     Console console;
 public:
@@ -41,7 +41,7 @@ public:
     sf::Sprite *tile;
     sf::Texture tile_texture;
 
-    std::map<Ghosts, sf::Sprite*> ghosts;
+    std::map<Ghosts, sf::Sprite *> ghosts;
     std::map<Ghosts, sf::Texture> ghosts_textures;
 
 

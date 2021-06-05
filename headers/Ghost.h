@@ -7,11 +7,11 @@
 
 #include "Entity.h"
 #include "Moving.h"
-#include "console.h"
+#include "Console.h"
 #include "PacMan.h"
 #include "MyClock.h"
 
-enum Mode{
+enum Mode {
     chase,
     scatter,
 };
@@ -43,7 +43,9 @@ public:
     sf::MyClock mode_myClock;
     float frightened_duration = 15;
     float frightened_speed_ratio = 0.7;
+
     Ghost(const sf::Vector2i &tilePosition, sf::RenderWindow &window, Maze *maze);
+
     Console *console;
 
     sf::Vector2i target;

@@ -20,7 +20,7 @@ bool Engine::is_running() {
 void Engine::handle_events() {
     Event event;
 
-    while (window->pollEvent(event)){
+    while (window->pollEvent(event)) {
 
         switch (event.type) {
             case sf::Event::Closed:
@@ -36,7 +36,7 @@ void Engine::handle_events() {
         }
     }
 
-        game_states->loop();
+    game_states->loop();
 //    }
 }
 

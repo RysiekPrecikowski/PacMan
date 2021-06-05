@@ -7,7 +7,7 @@
 
 #include <string>
 
-class Console{
+class Console {
     std::string name;
 public:
     Console(std::string name = "NAME");

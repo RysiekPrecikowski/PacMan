@@ -8,7 +8,7 @@
 #include "Entity.h"
 #include "Moving.h"
 #include "Directions.h"
-#include "console.h"
+#include "Console.h"
 #include <queue>
 
 class PacMan : public Moving {
@@ -17,13 +17,14 @@ private:
     Console *console;
 
 public:
-    int points=0;
+    int points = 0;
+
     PacMan(sf::RenderWindow &window, Maze *maze);
 
     void eat_food();
+
     int get_food_eaten() const;
 };
-
 
 
 #endif //CPP_PACMAN_H

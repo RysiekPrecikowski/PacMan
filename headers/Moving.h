@@ -8,7 +8,7 @@
 #include <queue>
 #include "Entity.h"
 #include "Directions.h"
-#include "console.h"
+#include "Console.h"
 #include "Maze.h"
 
 #include "MyClock.h"
@@ -32,10 +32,10 @@ protected:
     bool paused = false;
 
 public:
-    void setGoesThroughFake(bool goesThroughFake);
+    void set_goes_through_fake(bool goesThroughFake);
 
 
-    Moving(const sf::Vector2i &tilePosition, sf::RenderWindow &window, Maze *labirynth);
+    Moving(const sf::Vector2i &tilePosition, sf::RenderWindow &window, Maze *maze);
 
     void move();
 

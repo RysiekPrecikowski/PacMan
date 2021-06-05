@@ -6,29 +6,29 @@
 #define PACMAN_ENGINE_H
 
 #include <SFML/Graphics.hpp>
-#include "console.h"
+#include "Console.h"
 
-#include "state_manager.h"
-#include "state_playing.h"
+#include "StateManager.h"
+#include "StatePlaying.h"
 
 using namespace sf;
 
-class Engine{
+class Engine {
 private:
-    RenderWindow* window = nullptr;
+    RenderWindow *window = nullptr;
     Console console;
-    State_manager* game_states = nullptr;
+    State_manager *game_states = nullptr;
 
 public:
     Engine();
 
     bool is_running();
+
     void handle_events();
+
     void render();
 
 };
-
-
 
 
 #endif //PACMAN_ENGINE_H

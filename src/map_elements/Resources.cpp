@@ -8,7 +8,6 @@
 using namespace sf;
 
 
-
 void Resources::load(sf::RenderWindow *window) {
     font.loadFromFile("fonts/OpenSans-Regular.ttf");
     console.write("Font loaded");
@@ -38,12 +37,12 @@ void Resources::load(sf::RenderWindow *window) {
     ghosts_textures[Inky].loadFromFile("images/inky.png");
     ghosts_textures[Pinky].loadFromFile("images/pinky.png");
 
-    for (const auto& p : ghosts_textures){
+    for (const auto &p : ghosts_textures) {
         ghosts[p.first] = new Sprite(ghosts_textures[p.first]);
     }
     console.write("Ghosts loaded");
 
-    for (auto p:ghosts){
+    for (auto p:ghosts) {
         p.second->setScale(get_scale(*window, ghosts_textures[p.first]));
     }
 
@@ -58,10 +57,10 @@ void Resources::load(sf::RenderWindow *window) {
 }
 
 
-Vector2f Resources::get_scale(RenderWindow &window, Texture& texture){
+Vector2f Resources::get_scale(RenderWindow &window, Texture &texture) {
     float scale_x = ((float) 1 / Maze::size_x) * window.getSize().x / texture.getSize().x;
     float scale_y = ((float) 1 / Maze::size_y) * window.getSize().y / texture.getSize().y;
-    return Vector2f (scale_x, scale_y);
+    return Vector2f(scale_x, scale_y);
 }
 
 Resources::Resources() : console("Resources") {}

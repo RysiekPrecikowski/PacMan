@@ -6,14 +6,15 @@
 #include "Entity.h"
 #include "Maze.h"
 
-Entity::Entity(const sf::Vector2i &tilePosition, sf::RenderWindow& window)
-: tile_position(tilePosition), window(&window) {
+Entity::Entity(const sf::Vector2i &tilePosition, sf::RenderWindow &window)
+        : tile_position(tilePosition), window(&window) {
     teleport(tilePosition);
 }
 
-void Entity::move(float diff_x, float diff_y){
+void Entity::move(float diff_x, float diff_y) {
     move(sf::Vector2f(diff_x, diff_y));
 }
+
 #include <iostream>
 
 void Entity::move(sf::Vector2f vector) {
@@ -21,17 +22,17 @@ void Entity::move(sf::Vector2f vector) {
 
     auto tile_dimensions = get_tile_dimensions();
 
-    if (vector.x < 0){
-        tile_position.x = (int) std::round((screen_position.x + tile_dimensions.x/2  ) / tile_dimensions.x);
+    if (vector.x < 0) {
+        tile_position.x = (int) std::round((screen_position.x + tile_dimensions.x / 2) / tile_dimensions.x);
     } else if (vector.x > 0) {
-        tile_position.x = (int) std::round((screen_position.x - tile_dimensions.x/2  ) / tile_dimensions.x);
+        tile_position.x = (int) std::round((screen_position.x - tile_dimensions.x / 2) / tile_dimensions.x);
     }
 
 
-    if (vector.y < 0){
-        tile_position.y = (int) std::round((screen_position.y + tile_dimensions.y/2 ) / tile_dimensions.y);
+    if (vector.y < 0) {
+        tile_position.y = (int) std::round((screen_position.y + tile_dimensions.y / 2) / tile_dimensions.y);
     } else if (vector.y > 0) {
-        tile_position.y = (int) std::round((screen_position.y - tile_dimensions.y/2 ) / tile_dimensions.y);
+        tile_position.y = (int) std::round((screen_position.y - tile_dimensions.y / 2) / tile_dimensions.y);
     }
 }
 

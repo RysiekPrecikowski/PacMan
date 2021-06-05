@@ -9,7 +9,7 @@
 
 #include "Directions.h"
 
-enum tiles_type{
+enum tiles_type {
     none,
     crossing,
     block,
@@ -18,13 +18,13 @@ enum tiles_type{
     all_types
 };
 
-enum point_type{
+enum point_type {
     no_point,
     point,
     big_point
 };
 
-enum starting_pos{
+enum starting_pos {
     pac_man,
     pinky,
     inky,
@@ -32,9 +32,9 @@ enum starting_pos{
     blinky
 };
 
-class Tile : public Entity{
+class Tile : public Entity {
 public:
-    Tile(const sf::Vector2i &tilePosition, sf::RenderWindow& window);
+    Tile(const sf::Vector2i &tilePosition, sf::RenderWindow &window);
 
     tiles_type type = tiles_type::none;
     point_type point = point_type::no_point;
@@ -48,14 +48,17 @@ public:
 
     int food_in_maze = 0;
     int starting_food_in_maze = 0;
-    Tile* tiles[size_x][size_y]{};
+    Tile *tiles[size_x][size_y]{};
 
-    explicit Maze(sf::RenderWindow& window);
+    explicit Maze(sf::RenderWindow &window);
+
     bool is_maze(int x, int y);
+
     bool is_crossing(sf::Vector2i position);
+
     bool is_fake(int x, int y);
 
-    std::map<starting_pos, sf::Vector2i*> starting_positions;
+    std::map<starting_pos, sf::Vector2i *> starting_positions;
 };
 
 

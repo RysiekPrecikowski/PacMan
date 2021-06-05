@@ -2,11 +2,10 @@
 // Created by rprec on 30.05.2021.
 //
 
-#include "state_manager.h"
+#include "StateManager.h"
 
 
-void State_manager::addState(Game_state* state)
-{
+void State_manager::addState(Game_state *state) {
     states.push(state);
     states.top()->init();
 }
@@ -20,7 +19,7 @@ void State_manager::loop() {
         states.pop();
     }
 
-    if (loop_state == Game_state::win){
+    if (loop_state == Game_state::win) {
 //        addState()
     }
 }
@@ -34,13 +33,13 @@ void State_manager::render() {
 void State_manager::keyPressed(int code) {
     if (states.empty())
         return;
-    states.top()->keyPressed(code);
+    states.top()->key_pressed(code);
 }
 
 void State_manager::keyReleased(int code) {
     if (states.empty())
         return;
-    states.top()->keyReleased(code);
+    states.top()->key_released(code);
 }
 
 State_manager::State_manager(sf::RenderWindow &window) : console("State Manager") {

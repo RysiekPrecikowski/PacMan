@@ -2,7 +2,7 @@
 // Created by rprec on 30.05.2021.
 //
 
-#include "console.h"
+#include "Console.h"
 #include <iostream>
 
 using namespace std;

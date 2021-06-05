@@ -10,13 +10,13 @@ add_executable(cpp
         src/main.cpp
         headers/Engine.h
         src/Engine.cpp
-        src/utils/console.cpp
-        headers/console.h
-        headers/game_state.h
-        src/states/state_manager.cpp
-        headers/state_manager.h
-        src/states/state_playing.cpp
-        headers/state_playing.h
+        src/utils/Console.cpp
+        headers/Console.h
+        headers/GameState.h
+        src/states/StateManager.cpp
+        headers/StateManager.h
+        src/states/StatePlaying.cpp
+        headers/StatePlaying.h
         src/map_elements/Resources.cpp
         headers/Resources.h
         src/map_elements/Maze.cpp
@@ -28,8 +28,8 @@ add_executable(cpp
         headers/Directions.h
         src/creatures/Ghost.cpp
         headers/Ghost.h
-        src/creatures/All_ghosts.cpp
-        headers/All_ghosts.h
+        src/creatures/AllGhosts.cpp
+        headers/AllGhosts.h
         src/creatures/Moving.cpp
         headers/Moving.h src/utils/MyClock.cpp headers/MyClock.h)
 

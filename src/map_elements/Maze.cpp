@@ -9,13 +9,13 @@
 using namespace std;
 int l[Maze::size_x][Maze::size_y];
 
-void read_from_file(){
+void read_from_file() {
     ifstream fp("maze");
-    if (! fp) {
+    if (!fp) {
         cout << "Error, file couldn't be opened" << endl;
         return;
     }
-    for(int i = 0; i < Maze::size_y; i++) {
+    for (int i = 0; i < Maze::size_y; i++) {
         for (int j = 0; j < Maze::size_x; j++) {
             fp >> l[i][j];
         }
@@ -24,10 +24,10 @@ void read_from_file(){
 
 }
 
-Maze::Maze(sf::RenderWindow &window){
+Maze::Maze(sf::RenderWindow &window) {
     this->window = &window;
-    for (int i = 0 ; i < size_x ; i ++){
-        for(int j = 0 ; j < size_y ; j++){
+    for (int i = 0; i < size_x; i++) {
+        for (int j = 0; j < size_y; j++) {
             tiles[i][j] = new Tile(sf::Vector2i(i, j), window);
 
             tiles[i][j]->teleport(tiles[i][j]->tile_position);
@@ -35,8 +35,8 @@ Maze::Maze(sf::RenderWindow &window){
     }
 
     read_from_file();
-    for (int i = 0 ; i < size_x ; i++){
-        for (int j = 0 ; j < size_y ; j++){
+    for (int i = 0; i < size_x; i++) {
+        for (int j = 0; j < size_y; j++) {
             tiles_type type;
             switch (l[j][i]) {
                 case 1:
@@ -112,7 +112,7 @@ bool Maze::is_fake(int x, int y) {
 }
 
 
-bool Maze::is_crossing(sf::Vector2i position){
+bool Maze::is_crossing(sf::Vector2i position) {
     int x = position.x, y = position.y;
     x = (x + size_x) % size_x;
     y = (y + size_y) % size_y;
@@ -120,4 +120,4 @@ bool Maze::is_crossing(sf::Vector2i position){
     return tiles[x][y]->type == crossing;
 }
 
-Tile::Tile(const sf::Vector2i &tilePosition, sf::RenderWindow& window) : Entity(tilePosition, window) {}
+Tile::Tile(const sf::Vector2i &tilePosition, sf::RenderWindow &window) : Entity(tilePosition, window) {}

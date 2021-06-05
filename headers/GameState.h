@@ -2,21 +2,18 @@
 // Created by rprec on 30.05.2021.
 //
 
-#ifndef CPP_GAME_STATE_H
-#define CPP_GAME_STATE_H
+#ifndef CPP_GAMESTATE_H
+#define CPP_GAMESTATE_H
 
 #include "SFML/Graphics.hpp"
 
-class Game_state
-{
+class Game_state {
 
 protected:
-    sf::RenderWindow* window;
-
-
+    sf::RenderWindow *window;
 
 public:
-    enum state{
+    enum state {
         running,
         ended,
         win
@@ -25,13 +22,20 @@ public:
     explicit Game_state(sf::RenderWindow &window) : window(&window) {}
 
     virtual void init() {};
+
     virtual state loop() = 0;
+
     virtual void pause() = 0;
+
     virtual void resume() = 0;
+
     virtual void render() = 0;
-    virtual void keyPressed(int code) = 0;
-    virtual void keyReleased(int code) = 0;
-    bool paused= false;
+
+    virtual void key_pressed(int code) = 0;
+
+    virtual void key_released(int code) = 0;
+
+    bool paused = false;
 };
 
-#endif //CPP_GAME_STATE_H
+#endif //CPP_GAMESTATE_H
