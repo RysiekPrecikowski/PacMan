@@ -9,7 +9,7 @@
 #include "game_state.h"
 #include "console.h"
 #include "Resources.h"
-#include "labirynth.h"
+#include "Maze.h"
 #include "PacMan.h"
 #include "All_ghosts.h"
 
@@ -17,20 +17,29 @@ class State_playing : public Game_state{
 private:
     Console* console{};
     Resources resources;
-    Labirynth* labirynth{};
+    Maze* maze{};
     PacMan* pacMan{};
 
     All_ghosts* ghosts {};
 
 
+    bool win= false;
+    bool lost = false;
 
+    void check_collisions();
+    void move_creature(Moving *creature);
+    void reset_positions();
+
+    void render_maze();
+    void render_creatures();
+    void render_text();
 
 public:
     explicit State_playing(sf::RenderWindow& window) : Game_state(window) {}
 
-    void init();
+    void init() override;
 
-    void loop() override;
+    state loop() override;
 
     void render() override;
 
@@ -38,9 +47,9 @@ public:
 
     void keyReleased(int code) override;
 
-    void move_creature(Moving *creature);
+    void pause() override;
 
-    void reset_positions();
+    void resume() override;
 };
 
 #endif //CPP_STATE_PLAYING_H

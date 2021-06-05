@@ -14,16 +14,24 @@ protected:
     sf::RenderWindow* window;
 
 
-public:
 
+public:
+    enum state{
+        running,
+        ended,
+        win
+    };
 
     explicit Game_state(sf::RenderWindow &window) : window(&window) {}
 
     virtual void init() {};
-    virtual void loop() = 0;
+    virtual state loop() = 0;
+    virtual void pause() = 0;
+    virtual void resume() = 0;
     virtual void render() = 0;
     virtual void keyPressed(int code) = 0;
     virtual void keyReleased(int code) = 0;
+    bool paused= false;
 };
 
 #endif //CPP_GAME_STATE_H

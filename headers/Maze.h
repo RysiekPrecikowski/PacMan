@@ -2,8 +2,8 @@
 // Created by rprec on 30.05.2021.
 //
 
-#ifndef CPP_LABIRYNTH_H
-#define CPP_LABIRYNTH_H
+#ifndef CPP_MAZE_H
+#define CPP_MAZE_H
 
 #include "Entity.h"
 
@@ -20,7 +20,8 @@ enum tiles_type{
 
 enum point_type{
     no_point,
-    point
+    point,
+    big_point
 };
 
 enum starting_pos{
@@ -39,7 +40,7 @@ public:
     point_type point = point_type::no_point;
 };
 
-class Labirynth {
+class Maze {
     sf::RenderWindow *window;
 public:
     static const int size_x = 28;
@@ -48,17 +49,14 @@ public:
     int food_in_maze = 0;
     int starting_food_in_maze = 0;
     Tile* tiles[size_x][size_y]{};
-    explicit Labirynth(sf::RenderWindow& window);
+
+    explicit Maze(sf::RenderWindow& window);
     bool is_maze(int x, int y);
     bool is_crossing(sf::Vector2i position);
+    bool is_fake(int x, int y);
 
     std::map<starting_pos, sf::Vector2i*> starting_positions;
-
-
-
-//    bool is_maze2(Moving *creature, Directions direction);
-    bool is_fake(int x, int y);
 };
 
 
-#endif //CPP_LABIRYNTH_H
+#endif //CPP_MAZE_H

@@ -9,7 +9,18 @@ using namespace sf;
 
 
 
-void Resources::load() {
+void Resources::load(sf::RenderWindow *window) {
+    font.loadFromFile("fonts/OpenSans-Regular.ttf");
+    console.write("Font loaded");
+
+    frightened_ghost_texture.loadFromFile("images/frightened.png");
+    frightened_ghost = new Sprite(frightened_ghost_texture);
+    console.write("Frightened ghost loaded");
+
+    big_point_texture.loadFromFile("images/big_point.png");
+    big_point = new Sprite(big_point_texture);
+    console.write("Big point loaded");
+
     point_texture.loadFromFile("images/point.png");
     point = new Sprite(point_texture);
     console.write("Point loaded");
@@ -27,17 +38,29 @@ void Resources::load() {
     ghosts_textures[Inky].loadFromFile("images/inky.png");
     ghosts_textures[Pinky].loadFromFile("images/pinky.png");
 
-    for (auto p : ghosts_textures){
+    for (const auto& p : ghosts_textures){
         ghosts[p.first] = new Sprite(ghosts_textures[p.first]);
     }
-
     console.write("Ghosts loaded");
+
+    for (auto p:ghosts){
+        p.second->setScale(get_scale(*window, ghosts_textures[p.first]));
+    }
+
+    frightened_ghost->setScale(get_scale(*window, frightened_ghost_texture));
+    big_point->setScale(get_scale(*window, big_point_texture));
+    point->setScale(get_scale(*window, point_texture));
+    PacMan->setScale(get_scale(*window, PacMan_texture));
+    tile->setScale(get_scale(*window, tile_texture));
+
+
+    console.write("Scale set");
 }
 
 
 Vector2f Resources::get_scale(RenderWindow &window, Texture& texture){
-    float scale_x = ((float) 1 / Labirynth::size_x) * window.getSize().x / texture.getSize().x;
-    float scale_y = ((float) 1 / Labirynth::size_y) * window.getSize().y / texture.getSize().y;
+    float scale_x = ((float) 1 / Maze::size_x) * window.getSize().x / texture.getSize().x;
+    float scale_y = ((float) 1 / Maze::size_y) * window.getSize().y / texture.getSize().y;
     return Vector2f (scale_x, scale_y);
 }
 

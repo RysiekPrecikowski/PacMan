@@ -15,9 +15,6 @@ using namespace sf;
 
 class Engine{
 private:
-    sf::Clock clock;
-    float timer = 0;
-    float delay = 0.2;
     RenderWindow* window = nullptr;
     Console console;
     State_manager* game_states = nullptr;

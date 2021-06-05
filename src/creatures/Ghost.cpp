@@ -4,7 +4,7 @@
 
 #include "Ghost.h"
 
-Ghost::Ghost(const sf::Vector2i &tilePosition, sf::RenderWindow &window, Labirynth *labirynth) : Moving(tilePosition, window, labirynth) {
+Ghost::Ghost(const sf::Vector2i &tilePosition, sf::RenderWindow &window, Maze *maze) : Moving(tilePosition, window, maze) {
     get_directions()->push(left);
 
 
@@ -12,7 +12,7 @@ Ghost::Ghost(const sf::Vector2i &tilePosition, sf::RenderWindow &window, Labiryn
 
 void Ghost::next_move(sf::Vector2i pos) {
     bool ret = true;
-    if (labirynth->is_crossing(tile_position)) {
+    if (maze->is_crossing(tile_position)) {
         ret = false;
     }
 
@@ -22,14 +22,18 @@ void Ghost::next_move(sf::Vector2i pos) {
     if (ret)
         return;
 
-    switch (mode) {
-        case chase:
-            next_move_chase(pos);
-            break;
-        case scatter:
-            next_move_scatter(pos);
-            break;
+    if (is_frightened){
+        next_move_frightened();
+    } else {
+        switch (mode) {
+            case chase:
+                next_move_chase(pos);
+                break;
+            case scatter:
+                next_move_scatter(pos);
+                break;
 
+        }
     }
 }
 
@@ -43,7 +47,7 @@ int Ghost::get_distance(int x, int y, sf::Vector2i pos){
 
 Directions Ghost::get_best_direction(sf::Vector2i pos){
     Directions best = right;
-    if (!labirynth->is_crossing(tile_position)){
+    if (!maze->is_crossing(tile_position)){
         if(can_move(up) and up != -get_directions()->front()){
             best = up;
         } else if (can_move(left) and left != -get_directions()->front()) {
@@ -56,6 +60,11 @@ Directions Ghost::get_best_direction(sf::Vector2i pos){
         return best;
     }
 
+    if (getGoesThroughFake() and !escaped){
+        console->write("ESCAPE");
+        pos.y = 0;
+        escaped = true;
+    }
 
     int best_distance = INT_MAX, distance;
 
@@ -74,8 +83,7 @@ Directions Ghost::get_best_direction(sf::Vector2i pos){
         best_distance = distance;
         best = down;
     }
-    if ((distance = get_distance(x + 1 , y, pos)) < best_distance and can_move(right) and right != -get_directions()->front()){
-        best_distance = distance;
+    if (get_distance(x + 1 , y, pos) < best_distance and can_move(right) and right != -get_directions()->front()){
         best = right;
     }
 
@@ -93,7 +101,17 @@ void Ghost::next_move_chase(sf::Vector2i pos) {
 void Ghost::next_move_scatter(sf::Vector2i pos) {
     Directions direction = get_best_direction(scatter_mode_target);
 
-    target = pos;
+    target = scatter_mode_target;
+
+    change_direction(direction);
+}
+
+void Ghost::next_move_frightened(){
+    auto direction = static_cast<Directions>(rand() % 5 -2);
+
+    while (!can_move(direction) or direction == -get_directions()->front()){
+        direction = static_cast<Directions>(rand() % 5 -2);
+    }
 
     change_direction(direction);
 }
@@ -101,7 +119,6 @@ void Ghost::next_move_scatter(sf::Vector2i pos) {
 void Ghost::inverse_direction(){
     auto direction = static_cast<Directions>(-get_directions()->front());
 
-    std::string message = "CHANGE DIRECTION from " + std::to_string(get_directions()->front()) + " to ";
     if (can_move(direction)){
         change_direction(direction);
     } else {
@@ -118,9 +135,6 @@ void Ghost::inverse_direction(){
                 change_direction(down);
         }
     }
-    message += std::to_string(get_directions()->front());
-
-    console->write(message);
 }
 
 void Ghost::change_mode(Mode to_mode){
@@ -134,9 +148,6 @@ void Ghost::change_mode(Mode to_mode){
         base_scatter_duration = 0;
         scale_mode_time();
     }
-
-
-    console->write("CHANGE MODE " + std::to_string(to_mode));
 
     inverse_direction();
 }
@@ -153,4 +164,54 @@ void Ghost::actualize_mode() {
                 break;
         }
     }
+}
+
+bool Ghost::time_to_change_mode() {
+    if (is_frightened){
+        if (frightened_clock.getElapsedSeconds() > frightened_duration){
+            end_frightened();
+        } else {
+            return false;
+        }
+    }
+
+
+    float time = mode_myClock.getElapsedSeconds();
+
+    float delay;
+
+    switch (mode) {
+        case chase:
+            delay = chase_duration;
+            break;
+        case scatter:
+            delay = scatter_duration;
+            break;
+    }
+
+    if (time > delay){
+        mode_myClock.reset();
+
+        return true;
+    }
+    return false;
+}
+
+void Ghost::pause() {
+    Moving::pause();
+
+    mode_myClock.pause();
+    frightened_clock.pause();
+}
+
+void Ghost::end_frightened() {
+    is_frightened = false;
+    scaleDelay(1);
+    console->write("END FRIGTHENED");
+    mode_myClock.start();
+}
+
+void Ghost::scale_mode_time() {
+    scatter_duration = mode_duration_scale * base_scatter_duration;
+    chase_duration = mode_duration_scale * base_chase_duration;
 }

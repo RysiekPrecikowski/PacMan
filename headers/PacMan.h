@@ -17,12 +17,11 @@ private:
     Console *console;
 
 public:
-
-    PacMan(sf::RenderWindow &window, Labirynth *labirynth);
+    int points=0;
+    PacMan(sf::RenderWindow &window, Maze *maze);
 
     void eat_food();
-    int get_food_eaten();
-
+    int get_food_eaten() const;
 };
 
 

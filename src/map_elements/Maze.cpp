@@ -4,10 +4,10 @@
 
 #include <fstream>
 #include <iostream>
-#include "labirynth.h"
+#include "Maze.h"
 
 using namespace std;
-int l[Labirynth::size_x][Labirynth::size_y];
+int l[Maze::size_x][Maze::size_y];
 
 void read_from_file(){
     ifstream fp("maze");
@@ -15,8 +15,8 @@ void read_from_file(){
         cout << "Error, file couldn't be opened" << endl;
         return;
     }
-    for(int i = 0; i < Labirynth::size_y; i++) {
-        for (int j = 0; j < Labirynth::size_x; j++) {
+    for(int i = 0; i < Maze::size_y; i++) {
+        for (int j = 0; j < Maze::size_x; j++) {
             fp >> l[i][j];
         }
     }
@@ -24,20 +24,16 @@ void read_from_file(){
 
 }
 
-
-
-
-Labirynth::Labirynth(sf::RenderWindow &window){
+Maze::Maze(sf::RenderWindow &window){
     this->window = &window;
     for (int i = 0 ; i < size_x ; i ++){
         for(int j = 0 ; j < size_y ; j++){
             tiles[i][j] = new Tile(sf::Vector2i(i, j), window);
 
-            tiles[i][j]->center = false;
             tiles[i][j]->teleport(tiles[i][j]->tile_position);
         }
-
     }
+
     read_from_file();
     for (int i = 0 ; i < size_x ; i++){
         for (int j = 0 ; j < size_y ; j++){
@@ -53,6 +49,8 @@ Labirynth::Labirynth(sf::RenderWindow &window){
                     break;
                 case 2:
                     type = crossing;
+                    tiles[i][j]->point = point;
+                    food_in_maze += 1;
                     break;
                 case 3:
                     type = fake_block;
@@ -71,6 +69,8 @@ Labirynth::Labirynth(sf::RenderWindow &window){
                 case 7:
                     starting_positions[blinky] = new sf::Vector2i(i, j);
                     type = regular;
+                    tiles[i][j]->point = point;
+                    food_in_maze += 1;
                     break;
                 case 8:
                     starting_positions[clyde] = new sf::Vector2i(i, j);
@@ -80,6 +80,14 @@ Labirynth::Labirynth(sf::RenderWindow &window){
                     starting_positions[pinky] = new sf::Vector2i(i, j);
                     type = regular;
                     break;
+                case 10:
+                    type = regular;
+                    tiles[i][j]->point = big_point;
+                    food_in_maze += 1;
+                    break;
+                case 11:
+                    type = crossing;
+                    break;
             }
 
             tiles[i][j]->type = type;
@@ -87,38 +95,27 @@ Labirynth::Labirynth(sf::RenderWindow &window){
     }
 
     starting_food_in_maze = food_in_maze;
-
 }
 
-bool Labirynth::is_maze(int x, int y) {
+bool Maze::is_maze(int x, int y) {
     x = (x + size_x) % size_x;
     y = (y + size_y) % size_y;
-//    if (x < 0 or x >= Labirynth::size_x or y < 0 or y >= Labirynth::size_y)
-//        return true;
 
     return tiles[x][y]->type == tiles_type::block;
 }
 
-bool Labirynth::is_fake(int x, int y) {
+bool Maze::is_fake(int x, int y) {
     x = (x + size_x) % size_x;
     y = (y + size_y) % size_y;
-//    if (x < 0 or x >= Labirynth::size_x or y < 0 or y >= Labirynth::size_y)
-//        return true;
 
     return tiles[x][y]->type == tiles_type::fake_block;
 }
 
 
-bool Labirynth::is_crossing(sf::Vector2i position){
+bool Maze::is_crossing(sf::Vector2i position){
     int x = position.x, y = position.y;
     x = (x + size_x) % size_x;
     y = (y + size_y) % size_y;
-    if (
-            x < 0 or
-            x >= Labirynth::size_x or
-            y < 0 or
-            y >= Labirynth::size_y)
-        return true;
 
     return tiles[x][y]->type == crossing;
 }

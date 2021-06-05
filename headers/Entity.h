@@ -14,7 +14,8 @@ public:
     sf::RenderWindow* window;
     sf::Vector2f screen_position;
     sf::Vector2i tile_position;
-    bool center = true;
+
+    sf::Vector2f tile_dimensions = sf::Vector2f (-1, -1);
 
     explicit Entity(const sf::Vector2i &tilePosition, sf::RenderWindow &window);
 
@@ -22,7 +23,6 @@ public:
     void teleport(sf::Vector2i tile);
 
     void move(float diff_x, float diff_y);
-
     void teleport(int x, int y);
 
     sf::Vector2f get_tile_dimensions();

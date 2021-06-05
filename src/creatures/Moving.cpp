@@ -4,9 +4,9 @@
 
 #include "Moving.h"
 
-Moving::Moving(const sf::Vector2i &tilePosition, sf::RenderWindow &window, Labirynth *labirynth) : Entity(tilePosition, window) {
+Moving::Moving(const sf::Vector2i &tilePosition, sf::RenderWindow &window, Maze *labirynth) : Entity(tilePosition, window) {
     directions = new std::queue<Directions>;
-    this->labirynth = labirynth;
+    this->maze = labirynth;
 }
 
 void Moving::move() {
@@ -70,22 +70,11 @@ void Moving::enqueueDirection(Directions direction) {
         if (direction == -directions->front()) {
             auto *empty = new std::queue<Directions>;
             std::swap(directions, empty);
-        } else if (directions->size() == 2) {
-//            auto *q = new std::queue<Directions>;
-//            q->push(directions->back());
-//            std::swap(directions, q);
         }
     }
 
-//    if (directions->empty())
     if (directions->size() < 2)
         directions->push(direction);
-//    else {
-//        if (directions->front() != direction){
-//            directions->push(direction);
-//        }
-//    }
-
 }
 
 void Moving::change_direction(Directions direction) {
@@ -106,61 +95,11 @@ bool Moving::is_dead() {
     return not alive;
 }
 
-
-
-
-//bool in_tile(float x, float y, Tile *tile){
-//    return (
-//            x > tile->screen_position.x and x < tile->screen_position.x + tile->get_tile_dimensions().x and
-//            y > tile->screen_position.y and y < tile->screen_position.y + tile->get_tile_dimensions().y);
-//}
-//
-//bool is_maze(Moving *creature, Directions direction) {
-//    float x = creature->screen_position.x, y = creature->screen_position.y;
-//
-//    float offset_x=0, offset_y=0;
-//
-//    if(direction == right){
-//        offset_x = creature->move_diff;
-//        x += creature->move_diff;
-//    }
-//    if (direction == left){
-//        x -= creature->move_diff;
-//    }
-//    if (direction == up){
-//        y -= creature->move_diff;
-//    }
-//    if (direction == down){
-//        y += creature->move_diff;
-//        offset_y += creature->move_diff;
-//    }
-//
-//
-//    if (
-//            x < 0 or
-//            x >= creature->window->getSize().x or
-//            y < 0 or
-//            y >= creature->window->getSize().y)
-//        return true;
-//
-//    if(creature->tile_position.x < 0 or creature->tile_position.y >= creature->labirynth->size_x)
-//        return true;
-//
-//    for (int i = 0 ; i < 3 ; i ++){
-//        for(int j = 0 ; j < 3 ; i++){
-//            if (in_tile(x + offset_x, y + offset_y, creature->labirynth->tiles[creature->tile_position.x][creature->tile_position.y]))
-//                return true;
-//        }
-//    }
-//    return false;
-//}
-
-
 bool Moving::can_step(int x, int y){
     if (goes_through_fake)
-        return !labirynth->is_maze(x, y);
+        return !maze->is_maze(x, y);
     else
-        return !labirynth->is_maze(x, y) and !labirynth->is_fake(x, y);
+        return !maze->is_maze(x, y) and !maze->is_fake(x, y);
 }
 
 bool Moving::can_move(Directions direction){
@@ -168,7 +107,6 @@ bool Moving::can_move(Directions direction){
         return false;
     }
 
-//    return !is_maze(this, direction);
 
     switch (direction) {
         case up:
@@ -202,4 +140,29 @@ void Moving::scaleDelay(float ratio) {
 
 float Moving::getDelay() const {
     return delay;
+}
+
+bool Moving::getGoesThroughFake() const {
+    return goes_through_fake;
+}
+
+void Moving::pause() {
+    myClock.pause();
+    paused = true;
+}
+
+void Moving::resume() {
+    myClock.start();
+    paused= false;
+}
+
+bool Moving::time_to_move() {
+    float time = myClock.getElapsedSeconds();
+
+    if (time > delay){
+        myClock.reset();
+        return true;
+    }
+
+    return false;
 }

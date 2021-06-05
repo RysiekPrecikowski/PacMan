@@ -19,9 +19,7 @@ bool Engine::is_running() {
 
 void Engine::handle_events() {
     Event event;
-    float time = clock.getElapsedTime().asSeconds();
-    clock.restart();
-    timer += time;
+
     while (window->pollEvent(event)){
 
         switch (event.type) {
@@ -38,8 +36,6 @@ void Engine::handle_events() {
         }
     }
 
-//    if (timer > delay){
-//        timer = 0;
         game_states->loop();
 //    }
 }

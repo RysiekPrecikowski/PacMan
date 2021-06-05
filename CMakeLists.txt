@@ -19,8 +19,8 @@ add_executable(cpp
         headers/state_playing.h
         src/map_elements/Resources.cpp
         headers/Resources.h
-        src/map_elements/labirynth.cpp
-        headers/labirynth.h
+        src/map_elements/Maze.cpp
+        headers/Maze.h
         src/map_elements/Entity.cpp
         headers/Entity.h
         src/creatures/PacMan.cpp
@@ -31,7 +31,7 @@ add_executable(cpp
         src/creatures/All_ghosts.cpp
         headers/All_ghosts.h
         src/creatures/Moving.cpp
-        headers/Moving.h)
+        headers/Moving.h src/utils/MyClock.cpp headers/MyClock.h)
 
 target_include_directories(cpp PRIVATE headers)
 set(SFML_ROOT SFML)

@@ -13,12 +13,6 @@ enum Directions{
     right = -2
 };
 
-//std::string direction_to_string(Directions dir){
-////    std::map<int, std::string> names;
-////    names[NONE] = "NONE";
-//
-//
-//}
 
 
 #endif //CPP_DIRECTIONS_H

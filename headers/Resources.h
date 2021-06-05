@@ -16,17 +16,24 @@ enum Ghosts {
 };
 
 
-
 class Resources{
 private:
     Console console;
 public:
     Resources();
 
-    void load();
+    void load(sf::RenderWindow *window);
+
+    sf::Font font;
 
     sf::Sprite *point;
     sf::Texture point_texture;
+
+    sf::Sprite *frightened_ghost;
+    sf::Texture frightened_ghost_texture;
+
+    sf::Sprite *big_point;
+    sf::Texture big_point_texture;
 
     sf::Sprite *PacMan;
     sf::Texture PacMan_texture;

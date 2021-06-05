@@ -6,29 +6,30 @@
 
 using namespace sf;
 
-All_ghosts::All_ghosts(RenderWindow &window, Labirynth *labirynth) : labirynth(labirynth) {
-    ghosts[Blinky] = new Ghost(*labirynth->starting_positions[blinky], window, labirynth);
+All_ghosts::All_ghosts(RenderWindow &window, Maze *maze) : maze(maze) {
+    ghosts[Blinky] = new Ghost(*maze->starting_positions[blinky], window, maze);
     ghosts[Blinky]->console = new Console("Blinky");
     ghosts[Blinky]->setGoesThroughFake(true);
-    ghosts[Blinky]->scatter_mode_target = Vector2i (Labirynth::size_x -1, 0);
+    ghosts[Blinky]->scatter_mode_target = Vector2i (Maze::size_x - 1, 0);
     ghosts[Blinky]->change_mode(scatter);
+    ghosts[Blinky]->escaped = true;
 
-    ghosts[Pinky]  = new Ghost(*labirynth->starting_positions[pinky], window, labirynth);
+    ghosts[Pinky]  = new Ghost(*maze->starting_positions[pinky], window, maze);
     ghosts[Pinky]->console = new Console("Pinky");
     ghosts[Pinky]->setGoesThroughFake(true);
     ghosts[Pinky]->scatter_mode_target = Vector2i (0, 0);
     ghosts[Pinky]->change_mode(scatter);
 
-    ghosts[Inky]   = new Ghost(*labirynth->starting_positions[inky], window, labirynth);
+    ghosts[Inky]   = new Ghost(*maze->starting_positions[inky], window, maze);
     ghosts[Inky]->console = new Console("Inky");
     ghosts[Inky]->setGoesThroughFake(false);
-    ghosts[Inky]->scatter_mode_target = Vector2i (Labirynth::size_x -1, Labirynth::size_y-1);
+    ghosts[Inky]->scatter_mode_target = Vector2i (Maze::size_x - 1, Maze::size_y - 1);
     ghosts[Inky]->change_mode(scatter);
 
-    ghosts[Clyde]  = new Ghost(*labirynth->starting_positions[clyde], window, labirynth);
+    ghosts[Clyde]  = new Ghost(*maze->starting_positions[clyde], window, maze);
     ghosts[Clyde]->console = new Console("Clyde");
     ghosts[Clyde]->setGoesThroughFake(false);
-    ghosts[Clyde]->scatter_mode_target = Vector2i (0, Labirynth::size_y-1);
+    ghosts[Clyde]->scatter_mode_target = Vector2i (0, Maze::size_y - 1);
     ghosts[Clyde]->change_mode(scatter);
 }
 
@@ -58,7 +59,7 @@ sf::Vector2i get_target_ahead_pac_man(PacMan *pacMan, int tiles){
 
 void All_ghosts::move_ghosts(PacMan *PacMan) {
     if (ghosts[Blinky]->time_to_move()) {
-        ghosts[Blinky]->scaleDelay((1 - ( 1-(float)labirynth->food_in_maze/(float)labirynth->starting_food_in_maze)/2));
+        ghosts[Blinky]->scaleDelay((1 - ( 1- (float)maze->food_in_maze / (float)maze->starting_food_in_maze) / 2));
         ghosts[Blinky]->next_move(PacMan->tile_position);
         ghosts[Blinky]->actualize_mode();
         ghosts[Blinky]->move();
@@ -71,13 +72,13 @@ void All_ghosts::move_ghosts(PacMan *PacMan) {
     }
 
     if (ghosts[Inky]->time_to_move()) {
-        if (PacMan->get_food_eaten() >= 30)
-            ghosts[Inky]->setGoesThroughFake(true);
-
-
         Vector2i Inkys_target = get_target_ahead_pac_man(PacMan, 2);
         Vector2i Blinkys_vector = Inkys_target - ghosts[Blinky]->target;
         Inkys_target += Blinkys_vector;
+
+        if (PacMan->get_food_eaten() >= 30) {
+            ghosts[Inky]->setGoesThroughFake(true);
+        }
 
         ghosts[Inky]->next_move(Inkys_target);
         ghosts[Inky]->actualize_mode();
@@ -85,7 +86,7 @@ void All_ghosts::move_ghosts(PacMan *PacMan) {
     }
 
     if (ghosts[Clyde]->time_to_move()) {
-        if ((1 - (float)labirynth->food_in_maze / (float)labirynth->starting_food_in_maze) >= 1.f/3.f)
+        if ((1 - (float)maze->food_in_maze / (float)maze->starting_food_in_maze) >= 1.f / 3.f)
             ghosts[Clyde]->setGoesThroughFake(true);
 
         int Clyde_distance = Ghost::get_distance(PacMan->tile_position.x, PacMan->tile_position.y,
@@ -101,5 +102,17 @@ void All_ghosts::move_ghosts(PacMan *PacMan) {
         ghosts[Clyde]->next_move(Clyde_target);
         ghosts[Clyde]->actualize_mode();
         ghosts[Clyde]->move();
+    }
+}
+
+void All_ghosts::frighten_ghosts(){
+    for(auto p: ghosts){
+        auto ghost = p.second;
+
+        ghost->is_frightened = true;
+        ghost->mode_myClock.pause();
+        ghost->frightened_clock.reset();
+
+        ghost->console->write("FRIGHTENED");
     }
 }

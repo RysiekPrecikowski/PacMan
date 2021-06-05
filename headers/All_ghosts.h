@@ -11,15 +11,15 @@
 #include "PacMan.h"
 
 class All_ghosts {
-    Labirynth *labirynth;
+    Maze *maze;
 public:
     std::map<Ghosts, Ghost*> ghosts {};
 
-    All_ghosts(sf::RenderWindow &window, Labirynth *labirynth);
+    All_ghosts(sf::RenderWindow &window, Maze *maze);
 
     void move_ghosts(PacMan *PacMan);
 
-
+    void frighten_ghosts();
 };
 
 
