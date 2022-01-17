@@ -1,8 +1,6 @@
-#include <SFML/Graphics.hpp>
-#include <time.h>
-
-using namespace sf;
-
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "cert-msc51-cpp"
+#include <ctime>
 #include <iostream>
 
 using namespace std;
@@ -23,3 +21,4 @@ int main() {
 
     return 0;
 }
+#pragma clang diagnostic pop

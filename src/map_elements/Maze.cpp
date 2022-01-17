@@ -43,7 +43,7 @@ Maze::Maze(sf::RenderWindow &window) {
                     type = block;
                     break;
                 case 0:
-                    type = regular;
+                    type = tiles_type::regular;
                     tiles[i][j]->point = point;
                     food_in_maze += 1;
                     break;
@@ -60,28 +60,28 @@ Maze::Maze(sf::RenderWindow &window) {
                     break;
                 case 5:
                     starting_positions[pac_man] = new sf::Vector2i(i, j);
-                    type = regular;
+                    type = tiles_type::regular;
                     break;
                 case 6:
                     starting_positions[inky] = new sf::Vector2i(i, j);
-                    type = regular;
+                    type = tiles_type::regular;
                     break;
                 case 7:
                     starting_positions[blinky] = new sf::Vector2i(i, j);
-                    type = regular;
+                    type = tiles_type::regular;
                     tiles[i][j]->point = point;
                     food_in_maze += 1;
                     break;
                 case 8:
                     starting_positions[clyde] = new sf::Vector2i(i, j);
-                    type = regular;
+                    type = tiles_type::regular;
                     break;
                 case 9:
                     starting_positions[pinky] = new sf::Vector2i(i, j);
-                    type = regular;
+                    type = tiles_type::regular;
                     break;
                 case 10:
-                    type = regular;
+                    type = tiles_type::regular;
                     tiles[i][j]->point = big_point;
                     food_in_maze += 1;
                     break;
