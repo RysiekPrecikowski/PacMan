@@ -9,6 +9,7 @@ using namespace sf;
 
 
 void Resources::load(sf::RenderWindow *window) {
+
     font.loadFromFile("fonts/OpenSans-Regular.ttf");
     console.write("Font loaded");
 
